@@ -19,7 +19,7 @@ If you're paranoid, you can use the `gen_custom` function to supply an
 additional custom buffer that will be XOR'd in with the generated entropy:
 
 ```
-> let paranoia = await tg.gen(384, Buffer.from("a very random string"))
+> let paranoia = await tg.gen_custom(384, Buffer.from("a very random string"))
 > paranoia
 '~dolhes-parmes-tagnev-fablug-pagwyn-dopwel-ripnys-hardut-batnym-ridreb-finmec-mistes-figweg-labled-tocbet-bidryt-wolpub-filtev-tappeg-fassyt-tonred-savruc-lisred-tidlec'
 ```
