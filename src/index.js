@@ -12,6 +12,7 @@ const GALOIS_BITSIZE = 8
  */
 const unpad = str => {
   if (!(str.slice(0, 1) === '0')) {
+    /* istanbul ignore next */
     throw new Error('nonzero leading digit -- please report this as a bug!')
   }
 
@@ -103,7 +104,7 @@ const gen_ticket_more = (nbits, addl) => {
  * @param  {Number}  k the desired threshold value, smaller than 'n'
  * @return  {Array<String>}  an array of 'n' @q-encoded shards
  */
-shard = (ticket, n, k) => {
+const shard = (ticket, n, k) => {
   if (!ob.isValidPatq(ticket)) {
     throw new Error('input is not @q-encoded')
   }
@@ -125,7 +126,7 @@ shard = (ticket, n, k) => {
  * @param  {Array<String>}  shards an array of @q-encoded shards
  * @return  {String}  a @q-encoded ticket
  */
-combine = shards => {
+const combine = shards => {
   const hexshards = shards.map(ob.patq2hex).map(unpad)
   const hexticket = secrets.combine(hexshards)
   return ob.hex2patq(hexticket)
