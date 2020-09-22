@@ -86,7 +86,7 @@ You can similarly pass your own entropy in as an additional Buffer here:
 
 Split a ticket into 'shards' using a k/n Shamir's Secret Sharing scheme.
 Specify the number of shards to create and the number of shards required to
-reassemble the original ticket along with the ticket itself:
+reassemble the original ticket, along with the ticket itself:
 
 ```
 > let ticket = await up8.gen_ticket_more(384)
