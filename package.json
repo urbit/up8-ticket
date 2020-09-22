@@ -1,11 +1,22 @@
 {
-  "name": "master-ticket-generator",
-  "version": "0.1.1",
-  "description": "Generate master ticket-length @q values",
-  "main": "index.js",
+  "name": "up8-ticket",
+  "version": "0.2.0",
+  "description": "Generate UP8 master tickets",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urbit/up8-ticket.git"
+  },
+  "keywords": [
+    "urbit"
+  ],
+  "bugs": {
+    "url": "https://github.com/urbit/up8-ticket/issues"
+  },
+  "homepage": "https://github.com/urbit/up8-ticket#readme",
   "author": "~nidsut-tomdun",
   "license": "MIT",
   "dependencies": {
@@ -13,6 +24,7 @@
     "lodash.flatmap": "^4.5.0",
     "lodash.zipwith": "^4.2.0",
     "more-entropy": "0.0.7",
+    "secrets.js-grempe": "2.0.0",
     "urbit-ob": "^5.0.1"
   }
 }
