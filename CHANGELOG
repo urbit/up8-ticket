@@ -1,0 +1,8 @@
+# Changelog
+
+- 0.1.0 (2020-09-22)
+    * Initial release.
+
+      Contains facilities for generating, splitting, and combining master
+      tickets.
+
