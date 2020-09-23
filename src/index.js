@@ -11,6 +11,7 @@ const GALOIS_BITSIZE = 8
  * Strip a leading zero from a string.
  */
 const unpad = str => {
+  /* istanbul ignore next */
   if (!(str.slice(0, 1) === '0')) {
     /* istanbul ignore next */
     throw new Error('nonzero leading digit -- please report this as a bug!')
