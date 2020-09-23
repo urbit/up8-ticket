@@ -1,7 +1,7 @@
 # up8-ticket
 
 [![Build Status](https://secure.travis-ci.org/urbit/up8-ticket.png)](http://travis-ci.org/urbit/up8-ticket)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![npm](https://img.shields.io/npm/v/up8-ticket.svg)](https://www.npmjs.com/package/up8-ticket)
 
 Securely generate [UP8][up8p]-compatible, `@q`-encoded master tickets.  Split
