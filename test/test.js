@@ -14,29 +14,58 @@ const ticket_bytes = jsc.elements([8, 16, 24, 32, 40, 48, 56, 64])
 // tests
 
 describe('gen_ticket_simple', () => {
+  context("when no additional entropy provided", () => {
+    it('produces tickets of the correct bitlength', () => {
+      let prop = jsc.forall(ticket_bytes, bytes => {
+        let bits = bytes * 8
+        let ticket = mtg.gen_ticket_simple(bits)
+        let hex = ob.patq2hex(ticket)
+        let nbits = hex.length * 4
+        return (bits === nbits)
+      })
 
-  it('produces tickets of the correct bitlength', () => {
-    let prop = jsc.forall(ticket_bytes, bytes => {
-      let bits = bytes * 8
-      let ticket = mtg.gen_ticket_simple(bits)
-      let hex = ob.patq2hex(ticket)
-      let nbits = hex.length * 4
-      return (bits === nbits)
+      jsc.assert(prop)
     })
+  })
 
-    jsc.assert(prop)
+  context("when additional entropy provided", () => {
+    it('produces tickets of the correct bitlength', () => {
+      let prop = jsc.forall(ticket_bytes, bytes => {
+        let bits = bytes * 8
+        let addl = Buffer.from("look at all this entropy")
+        let ticket = mtg.gen_ticket_simple(bits, addl)
+        let hex = ob.patq2hex(ticket)
+        let nbits = hex.length * 4
+        return (bits === nbits)
+      })
+
+      jsc.assert(prop)
+    })
   })
 
 })
 
 describe('gen_ticket_more', () => {
 
-  it('produces tickets of the correct bitlength', async () => {
-    let given_bits = 384
-    let ticket = await mtg.gen_ticket_more(given_bits)
-    let hex = ob.patq2hex(ticket)
-    let expected_bits = hex.length * 4
-    expect(expected_bits).to.equal(given_bits)
+  context("when no additional entropy provided", () => {
+    it('produces tickets of the correct bitlength', async () => {
+      let given_bits = 384
+      let ticket = await mtg.gen_ticket_more(given_bits)
+      let hex = ob.patq2hex(ticket)
+      let expected_bits = hex.length * 4
+      expect(expected_bits).to.equal(given_bits)
+    })
+  })
+
+  context("when additional entropy provided", () => {
+    it('produces tickets of the correct bitlength', async () => {
+      let given_bits = 384
+      let addl = Buffer.from("you'll never predict this")
+      let ticket = await mtg.gen_ticket_more(given_bits, addl)
+      let hex = ob.patq2hex(ticket)
+      let expected_bits = hex.length * 4
+      expect(expected_bits).to.equal(given_bits)
+    })
   })
 
 })
