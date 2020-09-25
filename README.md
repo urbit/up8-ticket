@@ -7,6 +7,11 @@
 Securely generate [UP8][up8p]-compatible, `@q`-encoded master tickets.  Split
 and combine tickets via a k/n Shamir's Secret Sharing scheme.
 
+If you plan on generating a master ticket for a galaxy wallet, for example, you
+might want to use `gen_ticket_drbg(384)` to generate the ticket, and then
+`shard(.., 5, 3)` to split it into five shares (any three of which can be used
+to recover it).
+
 ## Install
 
 Grab it from npm like so:
@@ -48,7 +53,8 @@ Type ".help" for more information.
 
 ### gen\_ticket\_simple
 
-Generate a 256-bit master ticket via a simple CSPRNG:
+Generate a 256-bit master ticket via a simple CSPRNG (`crypto` or
+`window.crypto`):
 
 ```
 > up8.gen_ticket_simple(256)
@@ -60,15 +66,15 @@ argument as a Buffer.  It will simply be XOR'd with the random bytes produced
 internally:
 
 ```
-> up8.gen_ticket_simple(256, Buffer.from("a very very random string"))
+> up8.gen_ticket_simple(256, Buffer.from("a very random string"))
 '~donryd-mallur-wanrex-fidrex-nidwyt-dildul-padryd-talfen-panneb-nocbep-norwep-mispel-ralryc-fiddun-tomsup-toltex'
 ```
 
 ### gen\_ticket\_more
 
-Do the same thing, but use [more-entropy][ment] to generate the ticket using
-additional entropy.  Note that it returns a Promise (and takes a little
-longer):
+Do the same thing, but also use [more-entropy][ment] to produce additional
+entropy when generating the ticket.  Note that it returns a Promise (and takes
+a little longer):
 
 ```
 > await up8.gen_ticket_more(256)
@@ -82,6 +88,27 @@ You can similarly pass your own entropy in as an additional Buffer here:
 '~rivmer-ticnyd-mirfet-rolbyt-tarlus-ricrun-fitmec-losrul-barhep-misfet-pidfen-foshep-ronrem-natlyx-tarlet-sipdeb'
 ```
 
+### gen\_ticket\_drbg
+
+Do the same thing, but use a HMAC-DRBG function to combine the entropy produced
+by the underlying CSPRNG and more-entropy.  Like `gen_ticket_more`, it returns
+a Promise, and takes longer.
+
+Note that you must use at least 192 bits of entropy for this method.
+
+```
+> await up8.gen_ticket_drbg(256)
+'~morten-davnys-ronpes-hidtyd-pittev-donsug-fonpel-sornet-wacmeb-harbyl-monduc-linmur-racled-namdec-tildul-palmyn'
+```
+
+As with the other functions, you can pass your own entropy in as an additional
+Buffer:
+
+```
+> let ticket = await up8.gen_ticket_drbg(384, Buffer.from('a personalization string'))
+'~siller-hopryc-ripfyn-laglec-linpur-mogpun-poldux-bicmul-radnum-dapnup-monnub-dilwex-pacrym-samrup-ragryc-samdyt-timdys-hartul-lonrun-posmev-molrum-miclur-doznus-fasnut'
+```
+
 ### shard
 
 Split a ticket into 'shards' using a k/n Shamir's Secret Sharing scheme.
@@ -89,7 +116,7 @@ Specify the number of shards to create and the number of shards required to
 reassemble the original ticket, along with the ticket itself:
 
 ```
-> let ticket = await up8.gen_ticket_more(384)
+> let ticket = await up8.gen_ticket_drbg(384)
 > let shards = up8.shard(ticket, 3, 2)
 > shards
 [
