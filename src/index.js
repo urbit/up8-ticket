@@ -1,5 +1,7 @@
 const chunk = require('lodash.chunk')
 const flatMap = require('lodash.flatmap')
+const hash = require('hash.js')
+const DRBG = require('hmac-drbg')
 const more = require('more-entropy')
 const ob = require('urbit-ob')
 const secrets = require('secrets.js-grempe')
@@ -93,6 +95,42 @@ const gen_ticket_more = (nbits, addl) => {
 }
 
 /*
+ * Generate a master ticket of the desired bitlength.
+ *
+ * Uses both 'crypto.rng' and 'more-entropy' to produce the required entropy
+ * and nonce for input to a HMAC-DRBG generator, respectively.
+ *
+ * A buffer provided as the second argument will be used as the DRBG
+ * personalisation string.
+ *
+ * @param  {Number}  nbits desired bitlength of ticket (minimum 192)
+ * @param  {Buffer}  addl an optional buffer of additional bytes
+ * @return  {Promise<String>}  a @q-encoded master ticket, wrapped in a Promise
+ */
+const gen_ticket_drbg = async (nbits, addl) => {
+  const nbytes = nbits / 8
+  const entropy = crypto.rng(nbytes)
+
+  const prng  = new more.Generator()
+  const nonce = await new Promise((resolve, reject) => {
+    prng.generate(nbits, result => {
+      resolve(result.toString('hex'))
+      reject("entropy generation failed")
+    })
+  })
+
+  const d = new DRBG({
+    hash: hash.sha256,
+    entropy: entropy,
+    nonce: nonce,
+    pers: Buffer.isBuffer(addl) ? addl.toString('hex') : null
+  })
+
+  const bytes = d.generate(nbytes, 'hex')
+  return ob.hex2patq(bytes)
+}
+
+/*
  * Shard a ticket via a k/n Shamir's Secret Sharing scheme.
  *
  * Provided with a ticket, a desired number of shards 'n', and threshold value
@@ -136,6 +174,7 @@ const combine = shards => {
 module.exports = {
   gen_ticket_simple,
   gen_ticket_more,
+  gen_ticket_drbg,
 
   shard,
   combine

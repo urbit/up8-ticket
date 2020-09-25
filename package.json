@@ -26,6 +26,8 @@
   "author": "~nidsut-tomdun",
   "license": "MIT",
   "dependencies": {
+    "hash.js": "^1.1.7",
+    "hmac-drbg": "^1.0.1",
     "lodash.chunk": "^4.2.0",
     "lodash.flatmap": "^4.5.0",
     "lodash.zipwith": "^4.2.0",
