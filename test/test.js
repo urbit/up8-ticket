@@ -70,6 +70,31 @@ describe('gen_ticket_more', () => {
 
 })
 
+describe('gen_ticket_drbg', () => {
+
+  context("when no additional entropy provided", () => {
+    it('produces tickets of the correct bitlength', async () => {
+      let given_bits = 384
+      let ticket = await mtg.gen_ticket_drbg(given_bits)
+      let hex = ob.patq2hex(ticket)
+      let expected_bits = hex.length * 4
+      expect(expected_bits).to.equal(given_bits)
+    })
+  })
+
+  context("when additional entropy provided", () => {
+    it('produces tickets of the correct bitlength', async () => {
+      let given_bits = 384
+      let addl = Buffer.from("you'll really never predict this")
+      let ticket = await mtg.gen_ticket_drbg(given_bits, addl)
+      let hex = ob.patq2hex(ticket)
+      let expected_bits = hex.length * 4
+      expect(expected_bits).to.equal(given_bits)
+    })
+  })
+
+})
+
 describe('shard', () => {
 
   it('throws on non-@q input', () => {
