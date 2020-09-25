@@ -1,7 +1,7 @@
 {
   "name": "up8-ticket",
-  "version": "0.1.0",
-  "description": "Generate UP8 master tickets",
+  "version": "0.2.0",
+  "description": "Generate, share, and combine UP8 master tickets",
   "main": "src/index.js",
   "browser": {
     "up8-ticket": "./dist/index.js"

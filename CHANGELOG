@@ -1,5 +1,9 @@
 # Changelog
 
+- 0.2.0 (2020-09-25)
+    * Adds 'gen_ticket_drbg', which uses a HMAC-DRBG function for generating
+      tickets.
+
 - 0.1.0 (2020-09-22)
     * Initial release.
 
